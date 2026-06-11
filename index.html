@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Family Cookbook</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>The Family Cookbook</h1>
+      <p class="tagline">Recipes passed down, written down, and loved.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="filters" aria-label="Filter recipes">
+      <div class="filter-group">
+        <label for="search">Search</label>
+        <input type="text" id="search" placeholder="Recipe name or ingredient…" />
+      </div>
+
+      <div class="filter-group">
+        <label for="cuisine">Cuisine</label>
+        <select id="cuisine">
+          <option value="">All cuisines</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="time">Max cook time</label>
+        <select id="time">
+          <option value="">Any time</option>
+          <option value="30">Under 30 min</option>
+          <option value="60">Under 1 hour</option>
+          <option value="120">Under 2 hours</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="category">Category</label>
+        <select id="category">
+          <option value="">All categories</option>
+        </select>
+      </div>
+
+      <button id="clear-filters" class="clear-btn">Clear filters</button>
+    </section>
+
+    <div class="results-bar">
+      <span id="result-count"></span>
+    </div>
+
+    <section id="recipe-grid" class="recipe-grid" aria-live="polite"></section>
+  </main>
+
+  <!-- Recipe modal -->
+  <dialog id="recipe-modal" aria-modal="true">
+    <button class="modal-close" id="modal-close" aria-label="Close">✕</button>
+    <div id="modal-content"></div>
+  </dialog>
+
+  <footer>
+    <p>Made with love ❤️</p>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

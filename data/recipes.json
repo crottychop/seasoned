@@ -1,0 +1,190 @@
+[
+  {
+    "id": 1,
+    "title": "Grandma's Chicken Soup",
+    "description": "The cure for everything — a rich, golden broth simmered low and slow with vegetables and egg noodles.",
+    "cuisine": "American",
+    "category": "Soup",
+    "totalMinutes": 120,
+    "emoji": "🍲",
+    "ingredients": [
+      "1 whole chicken (3–4 lbs)",
+      "3 large carrots, cut into coins",
+      "3 celery stalks, sliced",
+      "1 large onion, quartered",
+      "4 garlic cloves",
+      "2 bay leaves",
+      "Salt and pepper to taste",
+      "2 cups egg noodles"
+    ],
+    "instructions": [
+      "Place the whole chicken in a large pot and cover with cold water by 2 inches.",
+      "Bring to a boil, then skim off any foam.",
+      "Add carrots, celery, onion, garlic, and bay leaves. Reduce heat to low.",
+      "Simmer uncovered for 1½ hours until the chicken is falling off the bone.",
+      "Remove chicken and let cool. Pull the meat off and shred it.",
+      "Strain the broth, return it to the pot, and bring back to a simmer.",
+      "Add noodles and cook until tender, about 8 minutes.",
+      "Return the shredded chicken to the pot. Season generously with salt and pepper.",
+      "Serve hot with crusty bread."
+    ],
+    "notes": "Grandma always said the secret is patience — never let it boil hard after the skim."
+  },
+  {
+    "id": 2,
+    "title": "Mom's Lasagna",
+    "description": "Layers of meaty Bolognese, creamy béchamel, and melty mozzarella. This is Sunday dinner.",
+    "cuisine": "Italian",
+    "category": "Dinner",
+    "totalMinutes": 90,
+    "emoji": "🍝",
+    "ingredients": [
+      "12 lasagna noodles",
+      "1 lb ground beef",
+      "1 lb Italian sausage",
+      "1 jar (24 oz) marinara sauce",
+      "1 can (14 oz) crushed tomatoes",
+      "3 cups ricotta cheese",
+      "2 eggs",
+      "3 cups shredded mozzarella",
+      "1 cup grated Parmesan",
+      "2 tbsp olive oil",
+      "Salt, pepper, basil, oregano"
+    ],
+    "instructions": [
+      "Preheat oven to 375°F.",
+      "Cook lasagna noodles according to package directions. Drain and lay flat.",
+      "Brown ground beef and sausage in olive oil. Drain fat. Add marinara and crushed tomatoes. Simmer 20 minutes.",
+      "Mix ricotta with eggs, half the Parmesan, salt, and pepper.",
+      "In a 9x13 pan: spread a thin layer of meat sauce. Layer noodles, ricotta mixture, meat sauce, mozzarella. Repeat twice.",
+      "Top with remaining noodles, meat sauce, mozzarella, and Parmesan.",
+      "Cover with foil and bake 45 minutes. Uncover and bake 15 more until bubbly.",
+      "Rest 15 minutes before cutting."
+    ],
+    "notes": "Even better the next day. Freezes beautifully — make two and freeze one."
+  },
+  {
+    "id": 3,
+    "title": "Aunt Linda's Banana Bread",
+    "description": "Dense, moist, and just sweet enough. The riper the bananas, the better.",
+    "cuisine": "American",
+    "category": "Baking",
+    "totalMinutes": 70,
+    "emoji": "🍌",
+    "ingredients": [
+      "3 very ripe bananas",
+      "⅓ cup melted butter",
+      "¾ cup sugar",
+      "1 egg, beaten",
+      "1 tsp vanilla",
+      "1 tsp baking soda",
+      "Pinch of salt",
+      "1½ cups all-purpose flour",
+      "½ cup chopped walnuts (optional)"
+    ],
+    "instructions": [
+      "Preheat oven to 350°F. Butter a 4x8 loaf pan.",
+      "Mash bananas in a large bowl until smooth.",
+      "Stir in melted butter.",
+      "Mix in sugar, egg, and vanilla.",
+      "Sprinkle baking soda and salt over the batter and stir in.",
+      "Fold in flour until just combined — don't overmix.",
+      "Fold in walnuts if using.",
+      "Pour into loaf pan and bake 55–65 minutes. A toothpick should come out clean.",
+      "Cool in pan 10 minutes before turning out."
+    ],
+    "notes": "Aunt Linda keeps extra bananas in the freezer — thaw overnight when you're ready to bake."
+  },
+  {
+    "id": 4,
+    "title": "Dad's Famous Chili",
+    "description": "A hearty, smoky chili that's been perfected over 30 years of Super Bowl Sundays.",
+    "cuisine": "American",
+    "category": "Dinner",
+    "totalMinutes": 60,
+    "emoji": "🌶️",
+    "ingredients": [
+      "2 lbs ground beef (or a mix of beef and pork)",
+      "1 large onion, diced",
+      "1 green bell pepper, diced",
+      "4 garlic cloves, minced",
+      "2 cans (15 oz each) kidney beans, drained",
+      "1 can (28 oz) crushed tomatoes",
+      "1 can (6 oz) tomato paste",
+      "2 tbsp chili powder",
+      "1 tsp cumin",
+      "1 tsp smoked paprika",
+      "½ tsp cayenne (adjust to taste)",
+      "Salt and pepper",
+      "Sour cream, shredded cheddar, and green onions to serve"
+    ],
+    "instructions": [
+      "Brown ground beef in a large Dutch oven over high heat. Season with salt and pepper. Remove and set aside.",
+      "In the same pot, sauté onion and pepper until softened, about 5 minutes.",
+      "Add garlic and cook 1 minute more.",
+      "Return beef to pot. Stir in tomato paste and cook 2 minutes.",
+      "Add crushed tomatoes, beans, chili powder, cumin, paprika, and cayenne.",
+      "Bring to a boil, then reduce heat to low. Simmer uncovered 30–40 minutes, stirring occasionally.",
+      "Taste and adjust seasoning.",
+      "Serve topped with sour cream, cheddar, and green onions."
+    ],
+    "notes": "The secret ingredient is a square of dark chocolate added in the last 10 minutes. Don't skip it."
+  },
+  {
+    "id": 5,
+    "title": "Nana's Pierogi",
+    "description": "Potato-and-cheese filled dumplings, boiled then pan-fried in butter with caramelized onions.",
+    "cuisine": "Polish",
+    "category": "Dinner",
+    "totalMinutes": 150,
+    "emoji": "🥟",
+    "ingredients": [
+      "3 cups all-purpose flour",
+      "1 cup sour cream",
+      "1 egg",
+      "1 tsp salt",
+      "4 large potatoes, peeled and quartered",
+      "1 cup shredded sharp cheddar",
+      "2 large onions, thinly sliced",
+      "4 tbsp butter",
+      "Salt and pepper"
+    ],
+    "instructions": [
+      "Make the dough: mix flour, sour cream, egg, and salt until a soft dough forms. Knead 5 minutes. Rest 30 minutes wrapped.",
+      "Boil potatoes until tender. Drain and mash with cheese, salt, and pepper. Let cool.",
+      "Roll dough to ⅛-inch thickness. Cut 3-inch rounds.",
+      "Place a spoonful of filling on each round. Fold in half and pinch edges firmly to seal.",
+      "Boil pierogi in salted water in batches until they float + 2 minutes more. Drain.",
+      "Meanwhile, caramelize onions in 2 tbsp butter over low heat, 20–25 minutes.",
+      "In a skillet, melt remaining butter over medium-high heat. Pan-fry boiled pierogi until golden on each side.",
+      "Serve topped with caramelized onions and a dollop of sour cream."
+    ],
+    "notes": "Make a big batch and freeze before boiling — drop frozen directly into boiling water, add 2 minutes to the time."
+  },
+  {
+    "id": 6,
+    "title": "Summer Corn Salad",
+    "description": "Sweet corn, cherry tomatoes, basil, and feta — the taste of August.",
+    "cuisine": "American",
+    "category": "Side",
+    "totalMinutes": 15,
+    "emoji": "🌽",
+    "ingredients": [
+      "4 ears of fresh corn, kernels cut off (or 3 cups frozen, thawed)",
+      "1 cup cherry tomatoes, halved",
+      "½ red onion, finely diced",
+      "½ cup crumbled feta",
+      "¼ cup fresh basil, torn",
+      "2 tbsp olive oil",
+      "1 tbsp red wine vinegar",
+      "Salt and pepper"
+    ],
+    "instructions": [
+      "If using fresh corn, you can serve it raw or char briefly in a hot skillet with a drizzle of oil.",
+      "Combine corn, tomatoes, red onion, and feta in a large bowl.",
+      "Drizzle with olive oil and vinegar. Season with salt and pepper.",
+      "Toss gently. Fold in basil just before serving."
+    ],
+    "notes": "Best at room temperature. Add a jalapeño and lime for a Tex-Mex spin."
+  }
+]
