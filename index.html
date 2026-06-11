@@ -3,56 +3,97 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Family Cookbook</title>
+  <title>Seasoned</title>
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
+
   <header>
     <div class="header-inner">
-      <h1>The Family Cookbook</h1>
-      <p class="tagline">Recipes passed down, written down, and loved.</p>
+      <h1>Seasoned 🫙</h1>
+      <p class="tagline">Food is how we say I love you. This is where we keep the receipts.</p>
     </div>
   </header>
 
+  <nav class="site-nav" aria-label="Site sections">
+    <button class="nav-tab active" data-tab="recipes">🍳 Recipes</button>
+    <button class="nav-tab" data-tab="game">🎮 Cook the Dish</button>
+    <button class="nav-tab" data-tab="memories">🍽️ Restaurant Memories</button>
+    <button class="nav-tab" data-tab="log">📅 Cook Log</button>
+  </nav>
+
   <main>
-    <section class="filters" aria-label="Filter recipes">
-      <div class="filter-group">
-        <label for="search">Search</label>
-        <input type="text" id="search" placeholder="Recipe name or ingredient…" />
+
+    <!-- ── Recipes tab ── -->
+    <div id="tab-recipes" class="tab-panel active">
+
+      <section class="filters" aria-label="Filter recipes">
+        <div class="filter-group">
+          <label for="search">Search</label>
+          <input type="text" id="search" placeholder="Recipe name or ingredient…" />
+        </div>
+        <div class="filter-group">
+          <label for="cuisine">Cuisine</label>
+          <select id="cuisine">
+            <option value="">All cuisines</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="time">Max cook time</label>
+          <select id="time">
+            <option value="">Any time</option>
+            <option value="30">Under 30 min</option>
+            <option value="60">Under 1 hour</option>
+            <option value="120">Under 2 hours</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="category">Category</label>
+          <select id="category">
+            <option value="">All categories</option>
+          </select>
+        </div>
+        <button id="clear-filters" class="clear-btn">Clear filters</button>
+      </section>
+
+      <div class="results-bar">
+        <span id="result-count"></span>
       </div>
 
-      <div class="filter-group">
-        <label for="cuisine">Cuisine</label>
-        <select id="cuisine">
-          <option value="">All cuisines</option>
-        </select>
-      </div>
+      <section id="recipe-grid" class="recipe-grid" aria-live="polite"></section>
 
-      <div class="filter-group">
-        <label for="time">Max cook time</label>
-        <select id="time">
-          <option value="">Any time</option>
-          <option value="30">Under 30 min</option>
-          <option value="60">Under 1 hour</option>
-          <option value="120">Under 2 hours</option>
-        </select>
-      </div>
-
-      <div class="filter-group">
-        <label for="category">Category</label>
-        <select id="category">
-          <option value="">All categories</option>
-        </select>
-      </div>
-
-      <button id="clear-filters" class="clear-btn">Clear filters</button>
-    </section>
-
-    <div class="results-bar">
-      <span id="result-count"></span>
     </div>
 
-    <section id="recipe-grid" class="recipe-grid" aria-live="polite"></section>
+    <!-- ── Cook the Dish tab ── -->
+    <div id="tab-game" class="tab-panel coming-soon-panel" hidden>
+      <div class="coming-soon">
+        <div class="coming-soon-emoji">🎮</div>
+        <h2>Cook the Dish</h2>
+        <p>Pick a recipe, drag the ingredients into the pot, and bring it to life. A little game to test how well you really know your way around the kitchen.</p>
+        <span class="coming-soon-badge">Coming soon</span>
+      </div>
+    </div>
+
+    <!-- ── Restaurant Memories tab ── -->
+    <div id="tab-memories" class="tab-panel coming-soon-panel" hidden>
+      <div class="coming-soon">
+        <div class="coming-soon-emoji">🍽️</div>
+        <h2>Restaurant Memories</h2>
+        <p>Every meal we've shared out in the world — the birthday dinners, the vacation spots, the random places that became traditions. Not reviews. Memories.</p>
+        <span class="coming-soon-badge">Coming soon</span>
+      </div>
+    </div>
+
+    <!-- ── Cook Log tab ── -->
+    <div id="tab-log" class="tab-panel coming-soon-panel" hidden>
+      <div class="coming-soon">
+        <div class="coming-soon-emoji">📅</div>
+        <h2>Cook Log</h2>
+        <p>Every time someone makes a family recipe, log it. Over time, we'll see who makes Mom's lasagna the most — and which recipes are overdue for a comeback.</p>
+        <span class="coming-soon-badge">Coming soon</span>
+      </div>
+    </div>
+
   </main>
 
   <!-- Recipe modal -->
@@ -62,9 +103,23 @@
   </dialog>
 
   <footer>
-    <p>Made with love ❤️</p>
+    <p>Made with love. Seasoned with time.</p>
   </footer>
 
   <script src="js/app.js"></script>
+  <script>
+    // Tab navigation
+    document.querySelectorAll('.nav-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const target = tab.dataset.tab;
+        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.hidden = true);
+        tab.classList.add('active');
+        document.getElementById(`tab-${target}`).hidden = false;
+        document.getElementById(`tab-${target}`).classList.add('active');
+      });
+    });
+  </script>
+
 </body>
 </html>

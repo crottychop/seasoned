@@ -44,6 +44,81 @@ header h1 {
   font-size: 1.1rem;
 }
 
+/* ── Site nav tabs ───────────────────────────────────── */
+.site-nav {
+  background: var(--dark);
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  border-bottom: 2px solid rgba(255,255,255,.08);
+}
+.site-nav::-webkit-scrollbar { display: none; }
+
+.nav-tab {
+  font-family: system-ui, sans-serif;
+  font-size: .85rem;
+  font-weight: 600;
+  letter-spacing: .03em;
+  padding: .85rem 1.4rem;
+  border: none;
+  background: transparent;
+  color: rgba(255,255,255,.5);
+  cursor: pointer;
+  white-space: nowrap;
+  border-bottom: 3px solid transparent;
+  transition: color .15s, border-color .15s;
+  margin-bottom: -2px;
+}
+.nav-tab:hover  { color: rgba(255,255,255,.85); }
+.nav-tab.active { color: #fff; border-bottom-color: var(--accent); }
+
+/* ── Coming soon panels ──────────────────────────────── */
+.coming-soon-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+}
+
+.coming-soon {
+  text-align: center;
+  max-width: 420px;
+  padding: 2rem;
+}
+
+.coming-soon-emoji {
+  font-size: 3.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.coming-soon h2 {
+  font-size: 1.6rem;
+  margin-bottom: .75rem;
+  color: var(--dark);
+}
+
+.coming-soon p {
+  font-family: system-ui, sans-serif;
+  font-size: .95rem;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+.coming-soon-badge {
+  font-family: system-ui, sans-serif;
+  font-size: .75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  padding: .35rem .9rem;
+  border-radius: 20px;
+  background: var(--tan);
+  color: var(--brown);
+}
+
 /* ── Main layout ─────────────────────────────────────── */
 main {
   max-width: 1200px;
