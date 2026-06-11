@@ -58,26 +58,24 @@ function renderGrid(recipes) {
     : `${recipes.length} of ${allRecipes.length} recipes`;
 
   if (recipes.length === 0) {
-    grid.innerHTML = `
-      <div class="empty-state">
-        <div class="emoji">🍽️</div>
-        <p>No recipes match your filters. Try clearing some!</p>
-      </div>`;
+    grid.innerHTML = `<div class="empty-state"><p>No recipes match your filters.</p></div>`;
     return;
   }
 
   grid.innerHTML = recipes.map(recipe => `
     <article class="recipe-card" data-id="${recipe.id}" tabindex="0" role="button"
              aria-label="Open ${recipe.title}">
-      <div class="recipe-card-placeholder">${recipe.emoji}</div>
+      ${recipe.photo
+        ? `<img class="recipe-card-img" src="${recipe.photo}" alt="${recipe.title}" loading="lazy" />`
+        : `<div class="recipe-card-img"></div>`}
       <div class="recipe-card-body">
-        <h2 class="recipe-card-title">${recipe.title}</h2>
-        <p class="recipe-card-desc">${recipe.description}</p>
         <div class="recipe-card-meta">
           <span class="tag cuisine">${recipe.cuisine}</span>
           <span class="tag">${recipe.category}</span>
-          <span class="tag time">⏱ ${formatTime(recipe.totalMinutes)}</span>
+          <span class="tag time">${formatTime(recipe.totalMinutes)}</span>
         </div>
+        <h2 class="recipe-card-title">${recipe.title}</h2>
+        <p class="recipe-card-desc">${recipe.description}</p>
       </div>
     </article>
   `).join('');
@@ -102,16 +100,19 @@ function openModal(id) {
   const recipe = allRecipes.find(r => r.id === id);
   if (!recipe) return;
 
+  const hasRecipe = recipe.ingredients && recipe.ingredients.length > 0;
   document.getElementById('modal-content').innerHTML = `
-    <h2>${recipe.emoji} ${recipe.title}</h2>
+    ${recipe.photo ? `<img src="${recipe.photo}" alt="${recipe.title}" class="modal-hero" />` : ''}
+    <h2>${recipe.title}</h2>
     <div class="modal-meta">
       <span class="tag cuisine">${recipe.cuisine}</span>
       <span class="tag">${recipe.category}</span>
-      <span class="tag time">⏱ ${formatTime(recipe.totalMinutes)}</span>
+      <span class="tag time">${formatTime(recipe.totalMinutes)}</span>
     </div>
-    <p style="margin-bottom:1.5rem; color: var(--muted); font-family: system-ui, sans-serif;">
+    <p style="margin-bottom:1.5rem; color: var(--mid); font-family: system-ui, sans-serif;">
       ${recipe.description}
     </p>
+    ${hasRecipe ? `
     <div class="modal-section">
       <h3>Ingredients</h3>
       <ul>${recipe.ingredients.map(i => `<li>${i}</li>`).join('')}</ul>
@@ -119,9 +120,12 @@ function openModal(id) {
     <div class="modal-section">
       <h3>Instructions</h3>
       <ol>${recipe.instructions.map(s => `<li>${s}</li>`).join('')}</ol>
-    </div>
-    ${recipe.notes ? `
-    <div class="modal-section">
+    </div>` : `
+    <div class="modal-note">
+      Recipe coming soon — add yours to data/recipes.json
+    </div>`}
+    ${recipe.notes && recipe.notes !== 'Recipe to be filled in.' ? `
+    <div class="modal-section" style="margin-top:1.5rem">
       <h3>Notes</h3>
       <div class="modal-note">${recipe.notes}</div>
     </div>` : ''}

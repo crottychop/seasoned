@@ -8,97 +8,125 @@
 </head>
 <body>
 
-  <header>
-    <div class="header-inner">
-      <h1>Seasoned 🫙</h1>
-      <p class="tagline">Food is how we say I love you. This is where we keep the receipts.</p>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-images" aria-hidden="true">
+      <img class="hero-slide active" src="pictures/IMG_0002.JPG" alt="" />
+      <img class="hero-slide" src="pictures/IMG_3976.JPG" alt="" />
+      <img class="hero-slide" src="pictures/IMG_8568.JPG" alt="" />
+      <img class="hero-slide" src="pictures/IMG_6257.JPG" alt="" />
     </div>
-  </header>
 
-  <nav class="site-nav" aria-label="Site sections">
-    <button class="nav-tab active" data-tab="recipes">🍳 Recipes</button>
-    <button class="nav-tab" data-tab="game">🎮 Cook the Dish</button>
-    <button class="nav-tab" data-tab="memories">🍽️ Restaurant Memories</button>
-    <button class="nav-tab" data-tab="log">📅 Cook Log</button>
-  </nav>
+    <aside class="hero-aside">
+      <div class="hero-aside-inner">
+        <p class="hero-label">A family archive</p>
+        <h1 class="wordmark">Seasoned</h1>
+        <p class="hero-tagline">Food is how we say I love you.<br>This is where we keep the receipts.</p>
 
-  <main>
+        <nav class="hero-nav" aria-label="Site sections">
+          <button class="hero-nav-item active" data-tab="recipes">
+            <span class="nav-label">Recipes</span>
+            <span class="nav-sub">The family archive</span>
+          </button>
+          <button class="hero-nav-item" data-tab="game">
+            <span class="nav-label">Cook the Dish</span>
+            <span class="nav-sub">Coming soon</span>
+          </button>
+          <button class="hero-nav-item" data-tab="memories">
+            <span class="nav-label">Restaurant Memories</span>
+            <span class="nav-sub">Coming soon</span>
+          </button>
+          <button class="hero-nav-item" data-tab="log">
+            <span class="nav-label">Cook Log</span>
+            <span class="nav-sub">Coming soon</span>
+          </button>
+        </nav>
+      </div>
+    </aside>
+  </section>
 
-    <!-- ── Recipes tab ── -->
-    <div id="tab-recipes" class="tab-panel active">
+  <!-- Content -->
+  <div id="content" class="content-wrap">
 
-      <section class="filters" aria-label="Filter recipes">
-        <div class="filter-group">
-          <label for="search">Search</label>
-          <input type="text" id="search" placeholder="Recipe name or ingredient…" />
+    <header class="content-header">
+      <span class="content-wordmark">Seasoned</span>
+      <nav class="content-tabs" aria-label="Switch section">
+        <button class="content-tab active" data-tab="recipes">Recipes</button>
+        <button class="content-tab" data-tab="game">Cook the Dish</button>
+        <button class="content-tab" data-tab="memories">Restaurant Memories</button>
+        <button class="content-tab" data-tab="log">Cook Log</button>
+      </nav>
+    </header>
+
+    <main>
+
+      <!-- Recipes -->
+      <div id="tab-recipes" class="tab-panel">
+        <div class="filters">
+          <div class="filter-group">
+            <label for="search">Search</label>
+            <input type="text" id="search" placeholder="Recipe name or ingredient" />
+          </div>
+          <div class="filter-group">
+            <label for="cuisine">Cuisine</label>
+            <select id="cuisine"><option value="">All</option></select>
+          </div>
+          <div class="filter-group">
+            <label for="time">Cook time</label>
+            <select id="time">
+              <option value="">Any</option>
+              <option value="30">Under 30 min</option>
+              <option value="60">Under 1 hr</option>
+              <option value="120">Under 2 hrs</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="category">Category</label>
+            <select id="category"><option value="">All</option></select>
+          </div>
+          <button id="clear-filters" class="clear-btn">Clear</button>
         </div>
-        <div class="filter-group">
-          <label for="cuisine">Cuisine</label>
-          <select id="cuisine">
-            <option value="">All cuisines</option>
-          </select>
-        </div>
-        <div class="filter-group">
-          <label for="time">Max cook time</label>
-          <select id="time">
-            <option value="">Any time</option>
-            <option value="30">Under 30 min</option>
-            <option value="60">Under 1 hour</option>
-            <option value="120">Under 2 hours</option>
-          </select>
-        </div>
-        <div class="filter-group">
-          <label for="category">Category</label>
-          <select id="category">
-            <option value="">All categories</option>
-          </select>
-        </div>
-        <button id="clear-filters" class="clear-btn">Clear filters</button>
-      </section>
 
-      <div class="results-bar">
-        <span id="result-count"></span>
+        <div class="results-bar">
+          <span id="result-count"></span>
+        </div>
+
+        <section id="recipe-grid" class="recipe-grid" aria-live="polite"></section>
       </div>
 
-      <section id="recipe-grid" class="recipe-grid" aria-live="polite"></section>
-
-    </div>
-
-    <!-- ── Cook the Dish tab ── -->
-    <div id="tab-game" class="tab-panel coming-soon-panel" hidden>
-      <div class="coming-soon">
-        <div class="coming-soon-emoji">🎮</div>
-        <h2>Cook the Dish</h2>
-        <p>Pick a recipe, drag the ingredients into the pot, and bring it to life. A little game to test how well you really know your way around the kitchen.</p>
-        <span class="coming-soon-badge">Coming soon</span>
+      <!-- Cook the Dish -->
+      <div id="tab-game" class="tab-panel" hidden>
+        <div class="coming-soon">
+          <p class="coming-soon-label">Coming soon</p>
+          <h2>Cook the Dish</h2>
+          <p>Pick a recipe, drag the ingredients into the pot, and bring it to life. A game to test how well you know your way around the kitchen.</p>
+        </div>
       </div>
-    </div>
 
-    <!-- ── Restaurant Memories tab ── -->
-    <div id="tab-memories" class="tab-panel coming-soon-panel" hidden>
-      <div class="coming-soon">
-        <div class="coming-soon-emoji">🍽️</div>
-        <h2>Restaurant Memories</h2>
-        <p>Every meal we've shared out in the world — the birthday dinners, the vacation spots, the random places that became traditions. Not reviews. Memories.</p>
-        <span class="coming-soon-badge">Coming soon</span>
+      <!-- Restaurant Memories -->
+      <div id="tab-memories" class="tab-panel" hidden>
+        <div class="coming-soon">
+          <p class="coming-soon-label">Coming soon</p>
+          <h2>Restaurant Memories</h2>
+          <p>Every meal we've shared out in the world. The birthday dinners, the vacation spots, the random places that became traditions. Not reviews — memories.</p>
+        </div>
       </div>
-    </div>
 
-    <!-- ── Cook Log tab ── -->
-    <div id="tab-log" class="tab-panel coming-soon-panel" hidden>
-      <div class="coming-soon">
-        <div class="coming-soon-emoji">📅</div>
-        <h2>Cook Log</h2>
-        <p>Every time someone makes a family recipe, log it. Over time, we'll see who makes Mom's lasagna the most — and which recipes are overdue for a comeback.</p>
-        <span class="coming-soon-badge">Coming soon</span>
+      <!-- Cook Log -->
+      <div id="tab-log" class="tab-panel" hidden>
+        <div class="coming-soon">
+          <p class="coming-soon-label">Coming soon</p>
+          <h2>Cook Log</h2>
+          <p>Every time someone makes a family recipe, log it. Over time we'll see who makes Mom's lasagna the most — and which recipes are overdue for a comeback.</p>
+        </div>
       </div>
-    </div>
 
-  </main>
+    </main>
+  </div>
 
   <!-- Recipe modal -->
   <dialog id="recipe-modal" aria-modal="true">
-    <button class="modal-close" id="modal-close" aria-label="Close">✕</button>
+    <button class="modal-close" id="modal-close" aria-label="Close">&#x2715;</button>
     <div id="modal-content"></div>
   </dialog>
 
@@ -108,16 +136,34 @@
 
   <script src="js/app.js"></script>
   <script>
-    // Tab navigation
-    document.querySelectorAll('.nav-tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        const target = tab.dataset.tab;
-        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.tab-panel').forEach(p => p.hidden = true);
-        tab.classList.add('active');
-        document.getElementById(`tab-${target}`).hidden = false;
-        document.getElementById(`tab-${target}`).classList.add('active');
+    // Hero cycling
+    const slides = document.querySelectorAll('.hero-slide');
+    let cur = 0;
+    setInterval(() => {
+      slides[cur].classList.remove('active');
+      cur = (cur + 1) % slides.length;
+      slides[cur].classList.add('active');
+    }, 3800);
+
+    // Tab switching — shared between hero nav and content tabs
+    function switchTab(id) {
+      document.querySelectorAll('[data-tab]').forEach(el => {
+        el.classList.toggle('active', el.dataset.tab === id);
       });
+      document.querySelectorAll('.tab-panel').forEach(panel => {
+        panel.hidden = panel.id !== 'tab-' + id;
+      });
+    }
+
+    document.querySelectorAll('.hero-nav-item').forEach(btn => {
+      btn.addEventListener('click', () => {
+        switchTab(btn.dataset.tab);
+        document.getElementById('content').scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    document.querySelectorAll('.content-tab').forEach(btn => {
+      btn.addEventListener('click', () => switchTab(btn.dataset.tab));
     });
   </script>
 
