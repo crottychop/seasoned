@@ -92,7 +92,7 @@ The app fetches `data/recipes.json`, so you need a local server rather than open
 
 **Option 1 — Python (no install needed):**
 ```bash
-cd Desktop/family-cookbook
+# from inside the project folder
 python3 -m http.server 8080
 # Open http://localhost:8080
 ```
