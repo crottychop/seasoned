@@ -95,35 +95,50 @@ function openModal(id) {
   const recipe = allRecipes.find(r => r.id === id);
   if (!recipe) return;
 
-  const hasRecipe = recipe.ingredients && recipe.ingredients.length > 0;
+  const hasIngredients = recipe.ingredients && recipe.ingredients.length > 0;
+  const hasInstructions = recipe.instructions && recipe.instructions.length > 0;
+  const hasNotes = recipe.notes &&
+    recipe.notes !== 'Recipe to be filled in.' &&
+    !recipe.notes.startsWith('Recipe to be filled in');
+
   document.getElementById('modal-content').innerHTML = `
-    ${recipe.photo ? `<img src="${recipe.photo}" alt="${recipe.title}" class="modal-hero" />` : ''}
-    <h2>${recipe.title}</h2>
-    <div class="modal-meta">
-      <span class="tag cuisine">${recipe.cuisine}</span>
-      <span class="tag">${recipe.category}</span>
-      <span class="tag time">${formatTime(recipe.totalMinutes)}</span>
+    <div class="recipe-view">
+
+      <div class="recipe-view-header">
+        <p class="recipe-view-category">${recipe.category}</p>
+        <h2 class="recipe-view-title">${recipe.title}</h2>
+        <p class="recipe-view-desc">${recipe.description}</p>
+        <div class="recipe-view-pills">
+          <span class="recipe-pill">${formatTime(recipe.totalMinutes)}</span>
+          ${recipe.serves ? `<span class="recipe-pill">Serves ${recipe.serves}</span>` : ''}
+        </div>
+      </div>
+
+      ${recipe.photo ? `
+      <div class="recipe-gallery">
+        <img src="${recipe.photo}" alt="${recipe.title}" />
+      </div>` : ''}
+
+      <div class="recipe-view-body">
+        <div>
+          <div class="recipe-col-head"><h3>Ingredients</h3></div>
+          ${hasIngredients
+            ? `<ul class="ingredient-list">${recipe.ingredients.map(i => `<li>${i}</li>`).join('')}</ul>`
+            : `<p class="recipe-col-empty">Ingredients coming soon.</p>`}
+        </div>
+        <div>
+          <div class="recipe-col-head"><h3>Method</h3></div>
+          ${hasInstructions
+            ? `<ol class="method-steps">${recipe.instructions.map((s, i) =>
+                `<li><span class="step-num">${i + 1}</span><p class="step-text">${s}</p></li>`
+              ).join('')}</ol>`
+            : `<p class="recipe-col-empty">Method coming soon.</p>`}
+        </div>
+      </div>
+
+      ${hasNotes ? `<p class="recipe-view-notes">${recipe.notes}</p>` : ''}
+
     </div>
-    <p style="margin-bottom:1.5rem; color: var(--mid); font-family: system-ui, sans-serif;">
-      ${recipe.description}
-    </p>
-    ${hasRecipe ? `
-    <div class="modal-section">
-      <h3>Ingredients</h3>
-      <ul>${recipe.ingredients.map(i => `<li>${i}</li>`).join('')}</ul>
-    </div>
-    <div class="modal-section">
-      <h3>Instructions</h3>
-      <ol>${recipe.instructions.map(s => `<li>${s}</li>`).join('')}</ol>
-    </div>` : `
-    <div class="modal-note">
-      Recipe coming soon — add yours to data/recipes.json
-    </div>`}
-    ${recipe.notes && recipe.notes !== 'Recipe to be filled in.' ? `
-    <div class="modal-section" style="margin-top:1.5rem">
-      <h3>Notes</h3>
-      <div class="modal-note">${recipe.notes}</div>
-    </div>` : ''}
   `;
 
   document.getElementById('recipe-modal').showModal();
