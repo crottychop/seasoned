@@ -1,0 +1,12 @@
+.DS_Store
+process_photos.sh
+reference design/
+
+# Raw/original photos — only processed versions and hero images go to GitHub
+pictures/*.JPG
+pictures/*.HEIC
+pictures/*.jpg
+!pictures/IMG_0002.JPG
+!pictures/IMG_3976.JPG
+!pictures/IMG_8568.JPG
+!pictures/IMG_6257.JPG
