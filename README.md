@@ -4,6 +4,10 @@
 
 **Seasoned** is our living archive — the recipes we grew up making, the restaurants we discovered together, the flavors we can't stop talking about. Part cookbook, part memory wall, part game. Built by us, for us, and everyone who's ever sat at our table.
 
+### 🌐 [**Open the live cookbook →**](https://crottychop.github.io/family-cookbook/)
+
+No setup needed — works on any phone or computer.
+
 ---
 
 ## What's inside
@@ -104,6 +108,9 @@ npx serve .
 ---
 
 ## Deploying (sharing the link with everyone)
+
+✅ **Already live via GitHub Pages:** https://crottychop.github.io/family-cookbook/
+Every push to `main` updates the site automatically within a minute.
 
 This is a plain static site — no build step, no backend. Any of these work for free:
 
