@@ -1,5 +1,4 @@
 .DS_Store
-process_photos.sh
 reference design/
 
 # Raw/original photos — only processed versions and hero images go to GitHub
