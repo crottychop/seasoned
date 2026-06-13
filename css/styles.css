@@ -1144,11 +1144,11 @@ dialog#recipe-modal::backdrop { background: rgba(36,20,28,.55); }
 .hero-content > * { pointer-events: auto; }
 .hero-title {
   display: flex; flex-direction: column; align-items: center;
-  font-family: 'Inter', system-ui, sans-serif;
-  font-weight: 700;
-  font-size: clamp(2.1rem, 8vmin, 4.6rem);
-  line-height: .98;
-  letter-spacing: -.03em;
+  font-family: 'Fraunces', Georgia, 'Times New Roman', serif;
+  font-weight: 600;
+  font-size: clamp(2.3rem, 8.6vmin, 5rem);
+  line-height: 1.0;
+  letter-spacing: -.015em;
   color: #fff;
   text-shadow: 0 2px 20px rgba(0, 0, 0, .5);
 }
@@ -1182,10 +1182,11 @@ dialog#recipe-modal::backdrop { background: rgba(36,20,28,.55); }
   z-index: 5;
   background: none; border: none; cursor: pointer;
   font: inherit;
-  font-size: clamp(.9rem, 1.4vw, 1.05rem);
+  font-size: 1rem;
   font-weight: 500;
-  letter-spacing: -.01em;
-  color: rgba(255, 255, 255, .82);
+  letter-spacing: .18em;
+  color: rgba(255, 255, 255, .55);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, .5);
   white-space: nowrap;
   padding: .4rem .6rem;
   transition: color .15s;
@@ -1193,6 +1194,10 @@ dialog#recipe-modal::backdrop { background: rgba(36,20,28,.55); }
 .reminisce-link:hover { color: #fff; text-decoration: underline; text-underline-offset: 4px; }
 .reminisce-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
 .reminisce-link .heart { color: var(--accent); margin-left: .15em; font-style: normal; }
+/* mobile: the wide-tracked label is too long for one line — let it wrap, centered */
+@media (max-width: 600px) {
+  .reminisce-link { white-space: normal; max-width: 86vw; text-align: center; line-height: 1.5; }
+}
 .hero-actions { display: flex; gap: .8rem; margin-top: 1.7rem; }
 .hero-btn {
   border: none; border-radius: 999px;
