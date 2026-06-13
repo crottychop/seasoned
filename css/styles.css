@@ -1090,7 +1090,7 @@ dialog#recipe-modal::backdrop { background: rgba(36,20,28,.55); }
 .dispatch-note {
   position: absolute;
   top: clamp(4rem, 23vh, 15rem);
-  left: 67%;                 /* nearer the headline, a touch higher */
+  left: 65.4%;               /* left edge aligns with the "y" in kain tayo */
   z-index: 6;
   width: min(310px, 74vw);
   background: var(--accent);
@@ -1098,13 +1098,12 @@ dialog#recipe-modal::backdrop { background: rgba(36,20,28,.55); }
   border-radius: 18px;
   padding: 1.05rem 1.2rem 1.15rem;
   box-shadow: 0 20px 46px -18px rgba(0, 0, 0, .55);
-  transform: translateX(-50%) rotate(4deg) scale(.8);
-  transform-origin: top center;
+  transform: translateX(-50%) rotate(4deg);
   animation: note-wiggle 2.8s ease-in-out infinite;
 }
 @keyframes note-wiggle {
-  0%, 100% { transform: translateX(-50%) rotate(3deg) scale(.8); }
-  50%      { transform: translateX(-50%) rotate(6deg) scale(.8); }
+  0%, 100% { transform: translateX(-50%) rotate(3deg); }
+  50%      { transform: translateX(-50%) rotate(6deg); }
 }
 .dispatch-note-title {
   font-weight: 700;
