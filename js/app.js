@@ -23,7 +23,7 @@ function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { co
 
 // ── Load ───────────────────────────────────────────────
 async function loadRecipes() {
-  const res = await fetch('data/recipes.json');
+  const res = await fetch('data/recipes.json', { cache: 'no-cache' });
   allRecipes = await res.json();
   allRecipes.forEach(r => {
     recById[r.id] = r;
@@ -211,6 +211,7 @@ function renderModal(recipe) {
   const hasIngredients = recipe.ingredients && recipe.ingredients.length > 0;
   const hasInstructions = recipe.instructions && recipe.instructions.length > 0;
   const hasNotes = recipe.notes && !recipe.notes.startsWith('Recipe to be filled in');
+  const cards = recipe.ingredientCards && recipe.ingredientCards.length ? recipe.ingredientCards : null;
   document.getElementById('modal-content').innerHTML = `
     <div class="recipe-view">
       <div class="recipe-view-header">
@@ -225,10 +226,20 @@ function renderModal(recipe) {
       ${recipe.photo ? `<div class="recipe-gallery"><img style="view-transition-name:recipe-hero" src="${recipe.photo}" alt="${recipe.title}" /></div>` : ''}
       <div class="recipe-view-body">
         <div>
-          <div class="recipe-col-head"><h3>Ingredients</h3></div>
-          ${hasIngredients
-            ? `<ul class="ingredient-list">${recipe.ingredients.map(i => `<li>${i}</li>`).join('')}</ul>`
-            : `<p class="recipe-col-empty">Ingredients coming soon.</p>`}
+          <div class="recipe-col-head">
+            <h3>Ingredients</h3>
+            ${cards ? `<button class="ing-toggle" id="ing-toggle">View as list</button>` : ''}
+          </div>
+          ${cards
+            ? `<div class="ingredient-grid" id="ing-grid">${cards.map(c => `
+                <figure class="ing-card">
+                  <span class="ing-thumb${c.img ? '' : ' is-empty'}">${c.img ? `<img src="${c.img}" alt="${c.label}" loading="lazy" />` : ''}</span>
+                  <figcaption>${c.label}</figcaption>
+                </figure>`).join('')}</div>
+               <ul class="ingredient-list" id="ing-list" hidden>${recipe.ingredients.map(i => `<li>${i}</li>`).join('')}</ul>`
+            : hasIngredients
+              ? `<ul class="ingredient-list">${recipe.ingredients.map(i => `<li>${i}</li>`).join('')}</ul>`
+              : `<p class="recipe-col-empty">Ingredients coming soon.</p>`}
         </div>
         <div>
           <div class="recipe-col-head"><h3>Method</h3></div>
@@ -240,6 +251,14 @@ function renderModal(recipe) {
       </div>
       ${hasNotes ? `<p class="recipe-view-notes">${recipe.notes}</p>` : ''}
     </div>`;
+  const tog = document.getElementById('ing-toggle');
+  if (tog) tog.addEventListener('click', () => {
+    const grid = document.getElementById('ing-grid');
+    const list = document.getElementById('ing-list');
+    const toList = !grid.hidden;          // grid currently shown → switch to list
+    grid.hidden = toList; list.hidden = !toList;
+    tog.textContent = toList ? 'View as grid' : 'View as list';
+  });
 }
 
 const modalEl = document.getElementById('recipe-modal');
@@ -251,10 +270,11 @@ modalEl.addEventListener('cancel', e => { e.preventDefault(); history.back(); })
 // ══ FILTERS + GRID (recipes view) ═══════════════════════
 function cardHTML(recipe) {
   return `
-    <button class="recipe-card" data-id="${recipe.id}" aria-label="Open ${recipe.title}">
+    <button class="recipe-card${recipe.complete ? '' : ' recipe-card--wip'}" data-id="${recipe.id}" aria-label="Open ${recipe.title}">
       ${recipe.photo
         ? `<img class="recipe-card-img" src="${recipe.photo}" alt="${recipe.title}" loading="lazy" />`
         : `<span class="recipe-card-img"></span>`}
+      ${recipe.complete ? '' : `<span class="recipe-card-flag">In progress</span>`}
       <span class="recipe-card-body">
         <span class="recipe-card-title">${recipe.title}</span>
         <span class="recipe-card-tags">${recipe.cuisine}, ${recipe.category} &middot; ${formatTime(recipe.totalMinutes)}</span>
@@ -332,7 +352,13 @@ function renderGrid(recipes) {
   const count = document.getElementById('result-count');
   count.textContent = recipes.length === allRecipes.length ? `${recipes.length} recipes` : `${recipes.length} of ${allRecipes.length}`;
   if (recipes.length === 0) { grid.innerHTML = `<div class="empty-state"><p>No recipes match your filters.</p></div>`; return; }
-  grid.innerHTML = recipes.map(cardHTML).join('');
+  // Completed recipes lead; in-progress follow. Headings only appear when both groups exist.
+  const done = recipes.filter(r => r.complete);
+  const wip = recipes.filter(r => !r.complete);
+  const section = (label, items) =>
+    (done.length && wip.length ? `<h3 class="grid-section-head">${label} <span class="grid-section-count">${items.length}</span></h3>` : '')
+    + items.map(cardHTML).join('');
+  grid.innerHTML = section('Completed', done) + section('In progress', wip);
   wireCards(grid);
 }
 function formatTime(minutes) {

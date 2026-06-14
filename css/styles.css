@@ -179,6 +179,7 @@ img { display: block; max-width: 100%; }
 
 /* ── Recipe card (shared: latest row + grid) ───────────── */
 .recipe-card {
+  position: relative;        /* anchor for the In-progress flag */
   background: none;
   border: none;
   padding: 0;
@@ -190,6 +191,35 @@ img { display: block; max-width: 100%; }
   font: inherit;
   color: inherit;
 }
+
+/* Completed vs in-progress grouping */
+.grid-section-head {
+  grid-column: 1 / -1;
+  margin: .25rem 0 -.75rem;
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.grid-section-head ~ .grid-section-head { margin-top: 2rem; }  /* gap above "In progress" */
+.grid-section-count { color: var(--faint); font-weight: 500; }
+
+.recipe-card-flag {
+  position: absolute;
+  top: .55rem;
+  left: .55rem;
+  z-index: 1;
+  font-size: .68rem;
+  font-weight: 600;
+  letter-spacing: .02em;
+  padding: .26rem .52rem;
+  border-radius: var(--pill);
+  background: rgba(36, 29, 32, .72);
+  color: #fff;
+}
+.recipe-card--wip .recipe-card-img { opacity: .7; }
+.recipe-card--wip .recipe-card-title { color: var(--muted); }
 
 .recipe-card-img {
   width: 100%;
@@ -642,6 +672,7 @@ dialog#recipe-modal::backdrop { background: rgba(36,20,28,.55); }
   width: 100%;
   aspect-ratio: 16/9;
   object-fit: cover;
+  object-position: center;     /* placement knob — try 'center 65%', 'center bottom' */
   border-radius: var(--r-lg);  /* keep corners rounded through the morph */
 }
 
@@ -652,11 +683,68 @@ dialog#recipe-modal::backdrop { background: rgba(36,20,28,.55); }
 }
 
 .recipe-col-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
   border-bottom: 1.5px solid var(--ink);
   padding-bottom: .6rem;
   margin-bottom: 1.25rem;
 }
 .recipe-col-head h3 { font-size: 1.05rem; font-weight: 600; letter-spacing: -.01em; }
+
+/* Ingredients view toggle (grid ⇄ list) */
+.ing-toggle {
+  flex: none;
+  font: inherit;
+  font-size: .82rem;
+  line-height: 1;
+  color: var(--accent);
+  background: var(--accent-tint);
+  border: 1px solid var(--accent-tint-border);
+  border-radius: var(--pill);
+  padding: .42rem .8rem;
+  cursor: pointer;
+  transition: background .15s, border-color .15s, color .15s;
+}
+.ing-toggle:hover { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+
+/* Die-cut ingredient grid */
+.ingredient-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem .75rem;
+}
+.ing-card {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: .5rem;
+}
+.ing-thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+}
+.ing-thumb img {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 14px rgba(60, 25, 40, .14));
+}
+.ing-thumb.is-empty {
+  border-radius: var(--r);
+  background: var(--panel);
+}
+.ing-card figcaption {
+  font-size: .82rem;
+  line-height: 1.3;
+  color: var(--ink);
+}
 
 .ingredient-list { list-style: none; }
 .ingredient-list li {

@@ -473,5 +473,78 @@
     "ingredients": [],
     "instructions": [],
     "notes": "Recipe to be filled in."
+  },
+  {
+    "id": 34,
+    "title": "Instant Pot Bulalo",
+    "description": "Filipino beef shank and bone-marrow soup, made the weeknight way in the Instant Pot. Frozen shank goes straight in — no blanching — for a deeply savory, ginger-forward broth with tender meat, marrow, and napa cabbage.",
+    "cuisine": "Filipino",
+    "category": "Soup",
+    "totalMinutes": 75,
+    "emoji": "🍲",
+    "serves": "2–3",
+    "ingredients": [
+      "1.5 lbs frozen beef shank with bone and marrow",
+      "1 medium yellow onion, quartered",
+      "½ tbsp whole peppercorns",
+      "2 tsp rock salt",
+      "A thumb or two of ginger, sliced (we use a lot)",
+      "2 tbsp fish sauce, plus more to taste",
+      "5–6 cups water, enough to cover the meat",
+      "½ head napa cabbage, cut into 3–4 inch chunks",
+      "Optional: 1 bunch bok choy, or corn and potatoes for a heartier pot"
+    ],
+    "instructions": [
+      "Load the still-frozen beef shank into the Instant Pot with the onion, peppercorns, ginger, rock salt, fish sauce, and 5–6 cups water — enough to cover the meat. No blanching: you can't blanch frozen meat, so the broth comes out a little cloudier but just as tasty.",
+      "Seal and pressure cook on High for 45 minutes — 10 minutes longer than usual to make up for the frozen start. Let the pressure release naturally for 15 minutes.",
+      "Open the lid and skim the fat and scum off the top of the broth with a ladle.",
+      "Add the napa cabbage (plus bok choy, corn, or potatoes if using) and switch to Sauté mode for 3–5 minutes, until the vegetables are tender.",
+      "Taste the broth and adjust with more fish sauce or salt.",
+      "Ladle into bowls, making sure each serving gets marrow, meat, and broth. Serve hot with rice and a dipping sauce of fish sauce, calamansi or lemon, and chilies."
+    ],
+    "ingredientCards": [
+      {
+        "label": "1.5 lb beef shank",
+        "img": "pictures/ingredients/beef-shank.webp"
+      },
+      {
+        "label": "1 yellow onion",
+        "img": "pictures/ingredients/yellow-onion.webp"
+      },
+      {
+        "label": "½ tbsp peppercorns",
+        "img": "pictures/ingredients/peppercorns.webp"
+      },
+      {
+        "label": "2 tsp rock salt",
+        "img": "pictures/ingredients/rock-salt.webp"
+      },
+      {
+        "label": "Thumb of ginger",
+        "img": "pictures/ingredients/ginger.webp"
+      },
+      {
+        "label": "2 tbsp fish sauce",
+        "img": "pictures/ingredients/fish-sauce.webp"
+      },
+      {
+        "label": "5–6 cups water",
+        "img": "pictures/ingredients/water.webp"
+      },
+      {
+        "label": "½ napa cabbage",
+        "img": "pictures/ingredients/napa-cabbage.webp"
+      },
+      {
+        "label": "Bok choy (optional)",
+        "img": "pictures/ingredients/bok-choy.webp"
+      },
+      {
+        "label": "Corn (optional)",
+        "img": "pictures/ingredients/corn.webp"
+      }
+    ],
+    "photo": "pictures/processed/bulalo.jpg",
+    "complete": true
   }
 ]

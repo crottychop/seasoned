@@ -12,3 +12,12 @@ pictures/*.jpg
 
 # Local-only folder of full-size original uploads (used to regenerate processed photos)
 jpg pictures/
+
+# Staging folder for raw family photos/videos — only the web-optimized output is committed
+raw-media/
+
+# Per-iteration visual archive (local only; ask to commit if you want cloud backup)
+archive/
+
+# Full-res ingredient masters (web versions live in pictures/ingredients/)
+raw-ingredients/
