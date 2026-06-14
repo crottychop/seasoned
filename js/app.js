@@ -184,11 +184,15 @@ function showRecipe(id, sourceImg) {
   if (!recipe) return;
   const modal = document.getElementById('recipe-modal');
   if (sourceImg) sourceImg.style.viewTransitionName = 'recipe-hero';
-  const run = () => {
+  const run = async () => {
     if (sourceImg) sourceImg.style.viewTransitionName = '';
     renderModal(recipe);
     if (!modal.open) modal.showModal();
     modal.scrollTop = 0;
+    // Decode the hero photo before the view-transition snapshots the new
+    // state, so the morph animates the actual image — not an empty container.
+    const hero = modal.querySelector('.recipe-gallery img');
+    if (hero) { try { await hero.decode(); } catch (e) { /* cache/abort — ignore */ } }
   };
   modalOpen = true; currentRecipeId = id;
   withTransition(run);

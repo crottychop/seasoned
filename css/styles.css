@@ -46,9 +46,6 @@ body {
   min-height: 100vh;
   min-height: 100dvh;
   overflow-x: clip;            /* never let anything widen the page past the viewport */
-  /* Appa is the cursor 🐶 (retina-crisp via image-set, ~44px, hotspot centered) */
-  cursor: url("../pictures/appa-cursor.png?v=4") 25 24, auto;
-  cursor: -webkit-image-set(url("../pictures/appa-cursor.png?v=4") 1x, url("../pictures/appa-cursor-2x.png?v=4") 2x) 25 24, auto;
 }
 .topbar { flex-shrink: 0; }
 #search { cursor: text; }      /* normal text caret while typing a search */
@@ -666,7 +663,8 @@ dialog#recipe-modal::backdrop { background: rgba(36,20,28,.55); }
   margin: 0 0 3rem;
   border-radius: var(--r-lg);
   overflow: hidden;
-  background: var(--panel);
+  /* no placeholder fill — the photo morphs into a transparent slot, so there's
+     no empty colored box flashing before the image arrives */
 }
 .recipe-gallery img {
   width: 100%;
@@ -734,7 +732,6 @@ dialog#recipe-modal::backdrop { background: rgba(36,20,28,.55); }
   max-width: 90%;
   max-height: 90%;
   object-fit: contain;
-  filter: drop-shadow(0 8px 14px rgba(60, 25, 40, .14));
 }
 .ing-thumb.is-empty {
   border-radius: var(--r);
