@@ -1,0 +1,202 @@
+[
+  {
+    "slug": "napa-cabbage",
+    "name": "Napa cabbage",
+    "location": "Fridge",
+    "group": "Leafy greens & herbs",
+    "img": "pictures/ingredients/napa-cabbage.webp"
+  },
+  {
+    "slug": "bok-choy",
+    "name": "Bok choy",
+    "location": "Fridge",
+    "group": "Leafy greens & herbs",
+    "img": "pictures/ingredients/bok-choy.webp"
+  },
+  {
+    "slug": "basil",
+    "name": "Basil",
+    "location": "Fridge",
+    "group": "Leafy greens & herbs",
+    "img": "pictures/pantry/basil.webp"
+  },
+  {
+    "slug": "parsley",
+    "name": "Parsley",
+    "location": "Fridge",
+    "group": "Leafy greens & herbs",
+    "img": "pictures/pantry/parsley.webp"
+  },
+  {
+    "slug": "corn",
+    "name": "Corn",
+    "location": "Fridge",
+    "group": "Vegetables",
+    "img": "pictures/ingredients/corn.webp"
+  },
+  {
+    "slug": "ginger",
+    "name": "Ginger",
+    "location": "Fridge",
+    "group": "Vegetables",
+    "img": "pictures/ingredients/ginger.webp"
+  },
+  {
+    "slug": "milk",
+    "name": "Milk",
+    "location": "Fridge",
+    "group": "Dairy & eggs",
+    "img": "pictures/pantry/milk.webp"
+  },
+  {
+    "slug": "soy-sauce",
+    "name": "Soy sauce",
+    "location": "Fridge",
+    "group": "Condiments",
+    "img": "pictures/pantry/soy-sauce.webp"
+  },
+  {
+    "slug": "beef-shank",
+    "name": "Beef shank",
+    "location": "Freezer",
+    "group": "Frozen proteins",
+    "img": "pictures/ingredients/beef-shank.webp"
+  },
+  {
+    "slug": "chicken-stock",
+    "name": "Chicken stock",
+    "location": "Pantry",
+    "group": "Canned & jarred",
+    "img": "pictures/pantry/chicken-stock.webp"
+  },
+  {
+    "slug": "canola-oil",
+    "name": "Canola oil",
+    "location": "Pantry",
+    "group": "Oils & vinegars",
+    "img": "pictures/pantry/canola-oil.webp",
+    "staple": true
+  },
+  {
+    "slug": "rice-vinegar",
+    "name": "Rice vinegar",
+    "location": "Pantry",
+    "group": "Oils & vinegars",
+    "img": "pictures/pantry/rice-vinegar.webp",
+    "staple": true
+  },
+  {
+    "slug": "fish-sauce",
+    "name": "Fish sauce",
+    "location": "Pantry",
+    "group": "Sauces & cooking wines",
+    "img": "pictures/ingredients/fish-sauce.webp"
+  },
+  {
+    "slug": "mirin",
+    "name": "Mirin",
+    "location": "Pantry",
+    "group": "Sauces & cooking wines",
+    "img": "pictures/pantry/mirin.webp"
+  },
+  {
+    "slug": "dark-soy-sauce",
+    "name": "Dark soy sauce",
+    "location": "Pantry",
+    "group": "Sauces & cooking wines",
+    "img": "pictures/pantry/dark-soy-sauce.webp"
+  },
+  {
+    "slug": "sake",
+    "name": "Sake",
+    "location": "Pantry",
+    "group": "Sauces & cooking wines",
+    "img": "pictures/pantry/sake.webp"
+  },
+  {
+    "slug": "rock-salt",
+    "name": "Rock salt",
+    "location": "Pantry",
+    "group": "Spices & seasoning",
+    "img": "pictures/ingredients/rock-salt.webp",
+    "staple": true
+  },
+  {
+    "slug": "peppercorns",
+    "name": "Peppercorns",
+    "location": "Pantry",
+    "group": "Spices & seasoning",
+    "img": "pictures/ingredients/peppercorns.webp",
+    "staple": true
+  },
+  {
+    "slug": "yellow-onion",
+    "name": "Yellow onion",
+    "location": "Pantry",
+    "group": "Aromatics",
+    "img": "pictures/ingredients/yellow-onion.webp"
+  },
+  {
+    "slug": "garlic",
+    "name": "Garlic",
+    "location": "Pantry",
+    "group": "Aromatics",
+    "img": "pictures/pantry/garlic.webp"
+  },
+  {
+    "slug": "instant-pot",
+    "name": "Instant Pot",
+    "location": "Equipment",
+    "group": "Appliances",
+    "img": "pictures/equipment/instant-pot.webp"
+  },
+  {
+    "slug": "donabe",
+    "name": "Donabe",
+    "location": "Equipment",
+    "group": "Appliances",
+    "img": "pictures/equipment/donabe.webp"
+  },
+  {
+    "slug": "air-fryer",
+    "name": "Air fryer",
+    "location": "Equipment",
+    "group": "Appliances",
+    "img": "pictures/equipment/air-fryer.webp"
+  },
+  {
+    "slug": "rice-cooker",
+    "name": "Rice cooker",
+    "location": "Equipment",
+    "group": "Appliances",
+    "img": "pictures/equipment/rice-cooker.webp"
+  },
+  {
+    "slug": "cast-iron-pan",
+    "name": "Cast iron pan",
+    "location": "Equipment",
+    "group": "Cookware",
+    "img": "pictures/equipment/cast-iron-pan.webp"
+  },
+  {
+    "slug": "dutch-oven",
+    "name": "Dutch oven",
+    "location": "Equipment",
+    "group": "Cookware",
+    "img": "pictures/equipment/dutch-oven.webp"
+  },
+  {
+    "slug": "stainless-steel-pot",
+    "name": "Stainless steel pot",
+    "location": "Equipment",
+    "group": "Cookware",
+    "img": "pictures/equipment/stainless-steel-pot.webp"
+  },
+  {
+    "slug": "steamer-basket",
+    "name": "Steamer basket",
+    "location": "Equipment",
+    "group": "Cookware",
+    "img": "pictures/equipment/steamer-basket.webp"
+  }
+]

@@ -7,15 +7,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/styles.css?v=34" />
+  <link rel="stylesheet" href="css/styles.css?v=45" />
 </head>
 <body>
 
   <!-- ── Top bar ─────────────────────────────────────────── -->
   <header class="topbar">
-    <a class="topbar-brand" href="#/" data-view="home">🫙&nbsp; seasoned</a>
     <nav class="topbar-nav" aria-label="Primary">
       <button class="topbar-link" data-view="recipes">recipes</button>
+      <button class="topbar-link" data-view="pantry">pantry</button>
       <button class="topbar-link" data-view="reminisce">reminisce</button>
     </nav>
   </header>
@@ -23,17 +23,15 @@
   <!-- ══ HOME view — the "Kain Tayo" card (Square-style image trail) ═ -->
   <main id="view-home" class="view view-home">
     <section class="hero" id="hero">
-      <div class="slideshow" id="slideshow" aria-hidden="true"><!-- faint idle cycling photos --></div>
-      <div class="trail-layer" id="trail-layer" aria-hidden="true"><!-- bright cursor image-trail --></div>
-      <div class="hero-scrim" aria-hidden="true"></div>
       <div class="hero-content">
         <h1 class="hero-title">
           <span>kain tayo</span>
           <span>cholo khai</span>
           <button class="lets-eat" data-view="recipes" aria-label="See the recipes">let's eat</button>
         </h1>
+        <button class="reminisce-link" data-view="reminisce">Remember some of our favorite dishes <span class="heart" aria-hidden="true">&#9829;&#xFE0E;</span></button>
       </div>
-      <button class="reminisce-link" data-view="reminisce">Remember some of our favorite dishes <span class="heart" aria-hidden="true">&#9829;&#xFE0E;</span></button>
+      <div class="slideshow" id="slideshow" aria-hidden="true"><!-- floating video card --></div>
       <p class="hero-byline">from the table of najeer, kate, &amp; appa</p>
 
       <aside class="dispatch-note" id="dispatch-note">
@@ -94,6 +92,22 @@
     </section>
   </main>
 
+  <!-- ══ PANTRY view — shared fridge/pantry inventory ════════ -->
+  <main id="view-pantry" class="view" hidden>
+    <section class="section">
+      <div class="section-head">
+        <h2 class="section-title">pantry</h2>
+        <div class="pantry-tools">
+          <button class="ing-toggle" id="pantry-view-toggle">View as list</button>
+          <span class="result-count" id="pantry-count"></span>
+        </div>
+      </div>
+      <p class="pantry-intro">Tap anything you're <strong>out of</strong> — recipes will quietly flag what you need.</p>
+      <p class="cook-line" id="cook-shelf"><!-- app.js: what can we make? --></p>
+      <div class="pantry-grid" id="pantry-grid" aria-live="polite"><!-- app.js --></div>
+    </section>
+  </main>
+
   <!-- ── Recipe modal ────────────────────────────────────── -->
   <dialog id="recipe-modal" aria-modal="true">
     <button class="recipe-view-back" id="modal-back" aria-label="Back">&#8592;&nbsp; Back</button>
@@ -101,6 +115,20 @@
     <div id="modal-content"></div>
   </dialog>
 
-  <script src="js/app.js?v=34"></script>
+  <!-- Pantry sync: paste your Firebase web config below to switch the pantry from
+       this-device (localStorage) to shared/live across the family. Until then it
+       works locally. See the setup steps Claude gave you. -->
+  <script>
+    window.SEASONED_FIREBASE = {
+      apiKey: "AIzaSyDiSe505RTCo_xnHtViyfq4ub447003-Uk",
+      authDomain: "fufafood.firebaseapp.com",
+      databaseURL: "https://fufafood-default-rtdb.firebaseio.com",
+      projectId: "fufafood",
+      storageBucket: "fufafood.firebasestorage.app",
+      messagingSenderId: "388522990824",
+      appId: "1:388522990824:web:8e1278bba569971f0a7d5d"
+    };
+  </script>
+  <script src="js/app.js?v=45"></script>
 </body>
 </html>

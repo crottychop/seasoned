@@ -5,11 +5,52 @@ let idBySlug = {};
 let modalOpen = false;
 let currentRecipeId = null;
 let currentView = 'home';
+let pantryData = null;
+let pantryView = 'grid';
 
-const VIEWS = ['home', 'recipes', 'reminisce'];
+const VIEWS = ['home', 'recipes', 'reminisce', 'pantry'];
 const FILTER_IDS = ['search', 'cuisine', 'time', 'category'];
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const noHover = window.matchMedia('(hover: none)');
+
+// ══ PANTRY store — shared inventory ═════════════════════
+// State holds only the OUT-of-stock slugs (everything defaults to in-stock, so an
+// empty store means "we have everything"). localStorage by default; defining
+// window.SEASONED_FIREBASE upgrades it to a live family-shared store, no other
+// code changes.
+const Pantry = (() => {
+  const KEY = 'seasoned-pantry-out';
+  const listeners = new Set();
+  let out = {};                 // slug -> true means OUT of stock
+  let pushCloud = null;         // set once Firebase connects
+  try { out = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) {}
+
+  const emit = () => listeners.forEach(fn => { try { fn(); } catch (e) {} });
+  const saveLocal = () => { try { localStorage.setItem(KEY, JSON.stringify(out)); } catch (e) {} };
+
+  const isInStock = slug => !out[slug];
+  function setStock(slug, inStock) {
+    if (inStock) delete out[slug]; else out[slug] = true;
+    saveLocal();
+    if (pushCloud) pushCloud(slug, inStock);
+    emit();
+  }
+  const toggle = slug => setStock(slug, !isInStock(slug));
+  const subscribe = fn => { listeners.add(fn); return () => listeners.delete(fn); };
+  const synced = () => !!pushCloud;
+
+  async function connectCloud(cfg) {
+    const a = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js');
+    const d = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js');
+    const database = d.getDatabase(a.initializeApp(cfg));
+    d.onValue(d.ref(database, 'pantryOut'), snap => { out = snap.val() || {}; saveLocal(); emit(); });
+    pushCloud = (slug, inStock) => d.set(d.ref(database, 'pantryOut/' + slug), inStock ? null : true);
+    emit();
+  }
+  if (window.SEASONED_FIREBASE) connectCloud(window.SEASONED_FIREBASE).catch(e => console.warn('[pantry] cloud sync off:', e.message));
+
+  return { isInStock, setStock, toggle, subscribe, synced };
+})();
 
 function withTransition(fn) {
   if (typeof document.startViewTransition === 'function' && !reduceMotion.matches) {
@@ -31,6 +72,8 @@ async function loadRecipes() {
     if (idBySlug[s] != null) s = `${s}-${r.id}`;
     slugById[r.id] = s; idBySlug[s] = r.id;
   });
+  // pantry master list (Fridge / Freezer / Pantry → groups → items)
+  try { pantryData = await (await fetch('data/pantry.json', { cache: 'no-cache' })).json(); } catch (e) { pantryData = []; }
   // recipes view (reused filterable grid)
   populateFilters();
   renderCategoryTabs();
@@ -41,6 +84,11 @@ async function loadRecipes() {
   initHero();
   // routing
   initRoute();
+  // pantry: refresh the view or live-update recipe markers whenever stock changes
+  Pantry.subscribe(() => {
+    if (currentView === 'pantry') renderPantry();
+    if (modalOpen) updateStockMarkers();
+  });
 }
 
 // ══ HOME: "Kain Tayo" card with a cursor image-trail ════
@@ -69,27 +117,40 @@ function preloadPhotos() {
 //    (this is the idle state).
 //  • bright trail — big rounded photo tiles spawned along the cursor's path
 //    (Square-style), full opacity, fading oldest-first — only while moving.
-let deck = [];
-let slidePos = 0;
-let sliding = false;
-let trailIndex = 0;
-const IDLE_MS = 4500;     // gentle faint-photo crossfade interval
-const TRAIL_MAX = 9;      // max live trail tiles
-const randGap = () => 70 + Math.random() * 170;   // organic spacing: 70–240px
+// The floating video card crossfades through candid family-cooking clips,
+// curated for people + food + cooking action, Super-8 graded (see process_media.sh).
+const HERO_CLIPS = [
+  'IMG_0789',  // najeer smiling at the counter
+  'IMG_0381',  // breading katsu
+  'IMG_2254',  // tossing pesto pasta
+  'IMG_0794',  // serving the wagyu
+  'IMG_2451',  // grilling skewers outside
+  'IMG_4627',  // slicing the beef
+].map(n => ({ src: `pictures/hero/${n}.mp4`, poster: `pictures/hero/${n}.jpg` }));
 
-function makeSlide(id) {
-  const img = document.createElement('img');
-  img.className = 'slide'; img.alt = '';
-  img.src = (imgCache[id] && imgCache[id].src) || recById[id].photo;
-  return img;
+let bgDeck = [];
+let bgPos = 0;
+let sliding = false;
+const IDLE_MS = 7000;     // each clip plays ~7s before crossfading to the next
+
+function makeBgSlide(clip) {
+  const v = document.createElement('video');
+  v.className = 'slide';
+  v.muted = true; v.loop = true; v.autoplay = true; v.playsInline = true;
+  v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
+  v.preload = 'auto';
+  v.poster = clip.poster;
+  v.src = clip.src;
+  v.play?.().catch(() => {});   // muted autoplay; ignore the rare reject
+  return v;
 }
 function advanceSlide() {
-  if (sliding) return;
+  if (sliding || bgDeck.length < 2) return;
   const show = document.getElementById('slideshow');
   if (!show) return;
   const prev = show.lastElementChild;
-  slidePos = (slidePos + 1) % deck.length;
-  const next = makeSlide(deck[slidePos]);
+  bgPos = (bgPos + 1) % bgDeck.length;
+  const next = makeBgSlide(bgDeck[bgPos]);
   next.classList.add('fade');             // start transparent
   show.appendChild(next);
   void next.offsetWidth;                  // reflow so the transition runs
@@ -98,43 +159,18 @@ function advanceSlide() {
   if (prev) prev.classList.add('fade');   // → fade out
   setTimeout(() => { if (prev && prev.parentNode) prev.remove(); sliding = false; }, 1600);
 }
-function spawnTrail(layer, x, y) {
-  const id = deck[trailIndex % deck.length];
-  trailIndex++;
-  const img = document.createElement('img');
-  img.className = 'trail-img'; img.alt = '';
-  img.src = (imgCache[id] && imgCache[id].src) || recById[id].photo;
-  img.style.left = x + 'px';
-  img.style.top = y + 'px';
-  img.style.setProperty('--rot', (Math.random() * 10 - 5).toFixed(1) + 'deg');
-  layer.appendChild(img);
-  while (layer.children.length > TRAIL_MAX) layer.removeChild(layer.firstChild);
-  img.addEventListener('animationend', () => img.remove());
-}
 function initHero() {
-  deck = buildDeck();
-  const hero = document.getElementById('hero');
+  bgDeck = shuffle(HERO_CLIPS.slice());
   const show = document.getElementById('slideshow');
-  const layer = document.getElementById('trail-layer');
-  if (!hero || !show || !layer) return;
-  show.appendChild(makeSlide(deck[0]));        // faint background, first photo
-  if (reduceMotion.matches) return;            // static, no motion
-  setInterval(advanceSlide, IDLE_MS);          // faint cycling, always
-  // bright cursor trail with organic (randomized) spacing.
-  // While moving, the hero gets .moving (idle photos fade to black).
-  let lx = null, ly = null, acc = 0, nextGap = randGap(), idleTO = null;
-  hero.addEventListener('pointermove', e => {
-    const r = hero.getBoundingClientRect();
-    const x = e.clientX - r.left, y = e.clientY - r.top;
-    hero.classList.add('moving');
-    clearTimeout(idleTO);
-    idleTO = setTimeout(() => hero.classList.remove('moving'), 450);
-    if (lx != null) acc += Math.hypot(x - lx, y - ly);
-    lx = x; ly = y;
-    if (acc < nextGap) return;
-    acc = 0; nextGap = randGap();
-    spawnTrail(layer, x + (Math.random() * 2 - 1) * 24, y + (Math.random() * 2 - 1) * 24);
-  });
+  if (!show) return;
+  if (reduceMotion.matches) {                  // static poster, no motion
+    const img = document.createElement('img');
+    img.className = 'slide'; img.alt = ''; img.src = bgDeck[0].poster;
+    show.appendChild(img);
+    return;
+  }
+  show.appendChild(makeBgSlide(bgDeck[0]));     // first clip
+  setInterval(advanceSlide, IDLE_MS);           // crossfade through the clips
 }
 
 // ══ ROUTER ═══════════════════════════════════════════════
@@ -144,6 +180,7 @@ function showView(name) {
   document.body.dataset.view = name;   // home hides the top bar (Mmm/Ahh cover nav)
   VIEWS.forEach(v => { const el = document.getElementById('view-' + v); if (el) el.hidden = v !== name; });
   document.querySelectorAll('.topbar-link[data-view]').forEach(l => l.classList.toggle('is-current', l.dataset.view === name));
+  if (name === 'pantry') renderPantry();
   window.scrollTo(0, 0);
 }
 function goView(name) {
@@ -159,6 +196,7 @@ function initRoute() {
     history.replaceState({ view: 'home' }, '', '#/');
     navigateToRecipe(idBySlug[rec[1]], null);
   } else if (h === '#/recipes') { history.replaceState({ view: 'recipes' }, '', h); showView('recipes'); }
+  else if (h === '#/pantry') { history.replaceState({ view: 'pantry' }, '', h); showView('pantry'); }
   else if (h === '#/reminisce') { history.replaceState({ view: 'reminisce' }, '', h); showView('reminisce'); }
   else { history.replaceState({ view: 'home' }, '', '#/'); showView('home'); }
 }
@@ -191,7 +229,7 @@ function showRecipe(id, sourceImg) {
     modal.scrollTop = 0;
     // Decode the hero photo before the view-transition snapshots the new
     // state, so the morph animates the actual image — not an empty container.
-    const hero = modal.querySelector('.recipe-gallery img');
+    const hero = modal.querySelector('.recipe-gallery img, .recipe-media img');
     if (hero) { try { await hero.decode(); } catch (e) { /* cache/abort — ignore */ } }
   };
   modalOpen = true; currentRecipeId = id;
@@ -216,6 +254,13 @@ function renderModal(recipe) {
   const hasInstructions = recipe.instructions && recipe.instructions.length > 0;
   const hasNotes = recipe.notes && !recipe.notes.startsWith('Recipe to be filled in');
   const cards = recipe.ingredientCards && recipe.ingredientCards.length ? recipe.ingredientCards : null;
+  const media = recipe.media && recipe.media.length ? recipe.media : null;
+  const equipment = recipe.equipment && recipe.equipment.length ? recipe.equipment : null;
+  const more = moreToCook(recipe);
+  const stock = pantryData ? recipeStock(recipe) : null;
+  const stockLine = stock && stock.relevant > 0
+    ? (stock.missing.length === 0 ? "You've got everything for this ✓" : `You're missing ${stock.missing.map(titleize).join(', ')}`)
+    : '';
   document.getElementById('modal-content').innerHTML = `
     <div class="recipe-view">
       <div class="recipe-view-header">
@@ -227,23 +272,40 @@ function renderModal(recipe) {
           ${recipe.serves ? `<span class="recipe-pill">Serves ${recipe.serves}</span>` : ''}
         </div>
       </div>
-      ${recipe.photo ? `<div class="recipe-gallery"><img style="view-transition-name:recipe-hero" src="${recipe.photo}" alt="${recipe.title}" /></div>` : ''}
+      ${media
+        ? `<div class="recipe-media">${media.map((m, i) => m.type === 'video'
+            ? `<video class="rm-item" autoplay muted loop playsinline preload="metadata"${m.poster ? ` poster="${m.poster}"` : ''} src="${m.src}"></video>`
+            : `<img class="rm-item"${i === 0 ? ' style="view-transition-name:recipe-hero"' : ''} src="${m.src}" alt="${recipe.title}" />`).join('')}</div>`
+        : recipe.photo
+          ? `<div class="recipe-gallery"><img style="view-transition-name:recipe-hero" src="${recipe.photo}" alt="${recipe.title}" /></div>`
+          : ''}
       <div class="recipe-view-body">
         <div>
           <div class="recipe-col-head">
             <h3>Ingredients</h3>
             ${cards ? `<button class="ing-toggle" id="ing-toggle">View as list</button>` : ''}
           </div>
+          ${stockLine ? `<p class="ing-stock-line${stock.missing.length ? ' is-missing' : ''}">${stockLine}</p>` : ''}
           ${cards
-            ? `<div class="ingredient-grid" id="ing-grid">${cards.map(c => `
-                <figure class="ing-card">
+            ? `<div class="ingredient-grid" id="ing-grid">${cards.map(c => { const s = slugFromImg(c.img); return `
+                <figure class="ing-card${s && !Pantry.isInStock(s) ? ' is-out' : ''}"${s ? ` data-slug="${s}"` : ''}>
                   <span class="ing-thumb${c.img ? '' : ' is-empty'}">${c.img ? `<img src="${c.img}" alt="${c.label}" loading="lazy" />` : ''}</span>
                   <figcaption>${c.label}</figcaption>
-                </figure>`).join('')}</div>
+                </figure>`; }).join('')}</div>
                <ul class="ingredient-list" id="ing-list" hidden>${recipe.ingredients.map(i => `<li>${i}</li>`).join('')}</ul>`
             : hasIngredients
               ? `<ul class="ingredient-list">${recipe.ingredients.map(i => `<li>${i}</li>`).join('')}</ul>`
               : `<p class="recipe-col-empty">Ingredients coming soon.</p>`}
+          ${equipment ? `
+          <div class="recipe-equip">
+            <div class="recipe-col-head"><h3>Equipment</h3></div>
+            ${equipment.some(e => e.img) ? `<div class="ingredient-grid equip-grid">${equipment.filter(e => e.img).map(e => `
+                <figure class="ing-card">
+                  <span class="ing-thumb"><img src="${e.img}" alt="${e.label}" loading="lazy" /></span>
+                  <figcaption>${e.label}</figcaption>
+                </figure>`).join('')}</div>` : ''}
+            ${equipment.some(e => !e.img) ? `<p class="equip-plus">Plus ${equipment.filter(e => !e.img).map(e => e.label.toLowerCase()).join(' · ')}</p>` : ''}
+          </div>` : ''}
         </div>
         <div>
           <div class="recipe-col-head"><h3>Method</h3></div>
@@ -254,6 +316,11 @@ function renderModal(recipe) {
         </div>
       </div>
       ${hasNotes ? `<p class="recipe-view-notes">${recipe.notes}</p>` : ''}
+      ${more.length ? `
+      <section class="recipe-more">
+        <div class="recipe-more-head"><h3>More to cook</h3></div>
+        <div class="card-row at-start" id="more-row">${more.map(cardHTML).join('')}</div>
+      </section>` : ''}
     </div>`;
   const tog = document.getElementById('ing-toggle');
   if (tog) tog.addEventListener('click', () => {
@@ -263,6 +330,25 @@ function renderModal(recipe) {
     grid.hidden = toList; list.hidden = !toList;
     tog.textContent = toList ? 'View as grid' : 'View as list';
   });
+  const moreRow = document.getElementById('more-row');
+  if (moreRow) { wireCards(moreRow); wireRowFade(moreRow); }
+}
+// Other recipes to surface after this one: same cuisine first, then a shuffled rest.
+function moreToCook(recipe) {
+  const rest = allRecipes.filter(r => r.id !== recipe.id);
+  const same = rest.filter(r => r.cuisine === recipe.cuisine);
+  const others = shuffle(rest.filter(r => r.cuisine !== recipe.cuisine));
+  return [...same, ...others].slice(0, 10);
+}
+// Toggle the edge-fade mask on a horizontal card-row as it scrolls.
+function wireRowFade(row) {
+  const update = () => {
+    const max = row.scrollWidth - row.clientWidth;
+    row.classList.toggle('at-start', row.scrollLeft <= 1);
+    row.classList.toggle('at-end', row.scrollLeft >= max - 1);
+  };
+  row.addEventListener('scroll', update, { passive: true });
+  update();
 }
 
 const modalEl = document.getElementById('recipe-modal');
@@ -365,6 +451,93 @@ function renderGrid(recipes) {
   grid.innerHTML = section('Completed', done) + section('In progress', wip);
   wireCards(grid);
 }
+
+// ══ PANTRY view ═════════════════════════════════════════
+function slugFromImg(img) { return img ? img.split('/').pop().replace(/\.\w+$/, '') : null; }
+function titleize(slug) { const s = slug.replace(/-/g, ' '); return s.charAt(0).toUpperCase() + s.slice(1); }
+// Inventory comes from the master pantry list (data/pantry.json).
+const PANTRY_LOCATIONS = ['Fridge', 'Freezer', 'Pantry', 'Equipment'];
+function pantryItemHTML(i) {
+  const inStock = Pantry.isInStock(i.slug);
+  const cls = inStock ? 'is-in' : 'is-out';
+  if (pantryView === 'list') {
+    return `<button class="pantry-row ${cls}" data-slug="${i.slug}" aria-pressed="${!inStock}">
+        <span class="pantry-dot"></span><span class="pantry-row-name">${i.name}</span>
+        <span class="pantry-row-state">${inStock ? 'In stock' : 'Out'}</span></button>`;
+  }
+  return `<button class="pantry-item ${cls}" data-slug="${i.slug}" aria-pressed="${!inStock}">
+      <span class="pantry-thumb${i.img ? '' : ' is-empty'}">${i.img ? `<img src="${i.img}" alt="${i.name}" loading="lazy" />` : ''}</span>
+      <span class="pantry-label">${i.name}</span>
+      <span class="pantry-state">${inStock ? 'In stock' : 'Out'}</span></button>`;
+}
+function renderPantry() {
+  renderCookShelf();
+  const host = document.getElementById('pantry-grid');
+  if (!host || !pantryData) return;
+  const inCount = pantryData.filter(i => Pantry.isInStock(i.slug)).length;
+  const count = document.getElementById('pantry-count');
+  if (count) count.textContent = `${inCount}/${pantryData.length} in stock · ${Pantry.synced() ? 'synced' : 'this device'}`;
+  host.className = 'pantry-body ' + (pantryView === 'list' ? 'is-list' : 'is-grid');
+  host.innerHTML = PANTRY_LOCATIONS.map(loc => {
+    const locItems = pantryData.filter(i => i.location === loc);
+    if (!locItems.length) return '';
+    const groups = [...new Set(locItems.map(i => i.group))];
+    const n = locItems.filter(i => Pantry.isInStock(i.slug)).length;
+    return `<section class="pantry-loc">
+        <div class="pantry-loc-head"><h3>${loc}</h3><span class="pantry-loc-count">${n}/${locItems.length} in stock</span></div>
+        <div class="pantry-groups">${groups.map(g => `<div class="pantry-group">
+          <h4 class="pantry-group-head">${g}</h4>
+          <div class="pantry-items">${locItems.filter(i => i.group === g).map(pantryItemHTML).join('')}</div>
+        </div>`).join('')}</div>
+      </section>`;
+  }).join('');
+  host.querySelectorAll('[data-slug]').forEach(b => b.addEventListener('click', () => Pantry.toggle(b.dataset.slug)));
+}
+
+// ── "What can we make?" — recipes cookable from the current pantry ──
+// Staples (salt, oil…) never block; ingredients not tracked in the pantry are
+// assumed on hand. A recipe is "ready" when every relevant ingredient is in stock.
+function recipeStock(recipe) {
+  const tracked = {};
+  (pantryData || []).forEach(i => { tracked[i.slug] = i; });
+  const relevant = (recipe.ingredientCards || [])
+    .map(c => slugFromImg(c.img))
+    .filter(s => tracked[s] && !tracked[s].staple);
+  const missing = relevant.filter(s => !Pantry.isInStock(s));
+  return { relevant: relevant.length, missing, ready: relevant.length > 0 && missing.length === 0 };
+}
+function joinNames(arr) {
+  if (arr.length <= 1) return arr.join('');
+  return arr.slice(0, -1).join(', ') + ' and ' + arr[arr.length - 1];
+}
+// A quiet one-liner — noticeable, never a hero.
+function renderCookShelf() {
+  const host = document.getElementById('cook-shelf');
+  if (!host) return;
+  if (!pantryData) { host.innerHTML = ''; return; }
+  const all = allRecipes.filter(r => r.ingredientCards && r.ingredientCards.length).map(r => ({ r, s: recipeStock(r) }));
+  const ready = all.filter(x => x.s.ready);
+  const almost = all.filter(x => !x.s.ready && x.s.missing.length >= 1 && x.s.missing.length <= 2);
+  const link = x => `<button class="cook-link" data-id="${x.r.id}">${x.r.title}</button>`;
+  let html = '';
+  if (ready.length) {
+    const names = joinNames(ready.slice(0, 3).map(link));
+    const extra = ready.length > 3 ? `, and ${ready.length - 3} more` : '';
+    html = `With what you have, you can make ${names}${extra}.`;
+  } else if (almost.length) {
+    const x = almost[0];
+    html = `One stop from ${link(x)} — just ${x.s.missing.map(titleize).join(' & ').toLowerCase()}.`;
+  }
+  host.innerHTML = html;
+  host.querySelectorAll('.cook-link').forEach(b =>
+    b.addEventListener('click', () => navigateToRecipe(parseInt(b.dataset.id), null)));
+}
+// Live-update the out-of-stock dots on an open recipe without a full re-render.
+function updateStockMarkers() {
+  document.querySelectorAll('#modal-content .ing-card[data-slug]').forEach(card => {
+    card.classList.toggle('is-out', !Pantry.isInStock(card.dataset.slug));
+  });
+}
 function formatTime(minutes) {
   if (minutes < 60) return `${minutes} min`;
   const h = Math.floor(minutes / 60), m = minutes % 60;
@@ -374,6 +547,13 @@ function syncFilterActive(id) { const el = document.getElementById(id); el.class
 FILTER_IDS.forEach(id => {
   const el = document.getElementById(id);
   if (el) el.addEventListener('input', () => { syncFilterActive(id); applyFilters(); });
+});
+
+const pantryViewToggle = document.getElementById('pantry-view-toggle');
+if (pantryViewToggle) pantryViewToggle.addEventListener('click', () => {
+  pantryView = pantryView === 'grid' ? 'list' : 'grid';
+  pantryViewToggle.textContent = pantryView === 'grid' ? 'View as list' : 'View as grid';
+  renderPantry();
 });
 
 // Dismiss the Father's Day note

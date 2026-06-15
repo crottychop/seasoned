@@ -545,6 +545,35 @@
       }
     ],
     "photo": "pictures/processed/bulalo.jpg",
-    "complete": true
+    "complete": true,
+    "media": [
+      {
+        "type": "image",
+        "src": "pictures/processed/bulalo.jpg"
+      },
+      {
+        "type": "video",
+        "src": "pictures/processed/bulalo.mp4",
+        "poster": "pictures/processed/bulalo.poster.jpg"
+      }
+    ],
+    "equipment": [
+      {
+        "label": "Instant Pot",
+        "img": "pictures/equipment/instant-pot.webp"
+      },
+      {
+        "label": "Ladle"
+      },
+      {
+        "label": "Tongs"
+      },
+      {
+        "label": "Knife & cutting board"
+      },
+      {
+        "label": "Serving bowls"
+      }
+    ]
   }
 ]
