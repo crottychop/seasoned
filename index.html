@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/styles.css?v=45" />
+  <link rel="stylesheet" href="css/styles.css?v=46" />
 </head>
 <body>
 
@@ -16,7 +16,6 @@
     <nav class="topbar-nav" aria-label="Primary">
       <button class="topbar-link" data-view="recipes">recipes</button>
       <button class="topbar-link" data-view="pantry">pantry</button>
-      <button class="topbar-link" data-view="reminisce">reminisce</button>
     </nav>
   </header>
 
@@ -27,9 +26,18 @@
         <h1 class="hero-title">
           <span>kain tayo</span>
           <span>cholo khai</span>
-          <button class="lets-eat" data-view="recipes" aria-label="See the recipes">let's eat</button>
+          <span class="lets-eat">let's eat</span>
         </h1>
-        <button class="reminisce-link" data-view="reminisce">Remember some of our favorite dishes <span class="heart" aria-hidden="true">&#9829;&#xFE0E;</span></button>
+        <nav class="home-paths" aria-label="Where to next">
+          <button class="home-path" data-view="recipes">
+            <span class="home-path-label">what to make</span>
+            <span class="home-path-sub">recipes</span>
+          </button>
+          <button class="home-path" data-view="pantry">
+            <span class="home-path-label">what we have</span>
+            <span class="home-path-sub">pantry</span>
+          </button>
+        </nav>
       </div>
       <div class="slideshow" id="slideshow" aria-hidden="true"><!-- floating video card --></div>
       <p class="hero-byline">from the table of najeer, kate, &amp; appa</p>
@@ -78,20 +86,6 @@
     </section>
   </main>
 
-  <!-- ══ REMINISCE view — placeholder for now ════════════════ -->
-  <main id="view-reminisce" class="view" hidden>
-    <section class="section reminisce">
-      <p class="zone-eyebrow">Reminisce</p>
-      <h2 class="reminisce-title">The meals we still talk about.</h2>
-      <p class="reminisce-copy">Every dinner out that became a story — the birthdays, the trips, the little spots that turned into traditions. We're still gathering the photos.</p>
-      <div class="polaroid-row">
-        <div class="polaroid"><span class="polaroid-photo"></span><span class="polaroid-cap">coming soon</span></div>
-        <div class="polaroid"><span class="polaroid-photo"></span><span class="polaroid-cap">coming soon</span></div>
-        <div class="polaroid"><span class="polaroid-photo"></span><span class="polaroid-cap">coming soon</span></div>
-      </div>
-    </section>
-  </main>
-
   <!-- ══ PANTRY view — shared fridge/pantry inventory ════════ -->
   <main id="view-pantry" class="view" hidden>
     <section class="section">
@@ -129,6 +123,6 @@
       appId: "1:388522990824:web:8e1278bba569971f0a7d5d"
     };
   </script>
-  <script src="js/app.js?v=45"></script>
+  <script src="js/app.js?v=46"></script>
 </body>
 </html>

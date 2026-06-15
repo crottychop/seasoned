@@ -22,18 +22,18 @@ if [ -z "$(ls -A "$SRC" 2>/dev/null)" ]; then
   exit 0
 fi
 
-# Super-8 documentary grade: downscale, lifted warm shadows, lower contrast/sat,
-# gentle vignette, moving film grain. Baked in so the look is consistent + survives
-# the hero's dimming (a CSS overlay would wash out).
-GRADE="scale='min(960,iw)':-2:flags=lanczos,curves=r='0/0.05 0.5/0.57 1/0.97':g='0/0.04 0.5/0.5 1/0.93':b='0/0.06 0.5/0.44 1/0.88',eq=contrast=0.93:saturation=0.90:gamma=1.02:brightness=0.015,colorbalance=rs=0.04:bs=-0.05:rm=0.05:bm=-0.04:rh=0.05:bh=-0.07,vignette=PI/5,noise=alls=11:allf=t+u,format=yuv420p"
+# Clean web transcode: downscale to ≤960px only — no color grade, grain, or
+# vignette, so the hero plays natural, borderless footage. Clips are capped at
+# 10s since the hero crossfades roughly every 7s.
+GRADE="scale='min(960,iw)':-2:flags=lanczos,format=yuv420p"
 
-echo "🎬 Transcoding + Super-8 grading videos…"
+echo "🎬 Transcoding videos (clean, ≤10s)…"
 for f in "$SRC"/*.mov "$SRC"/*.mp4 "$SRC"/*.m4v "$SRC"/*.avi; do
   base="$(basename "${f%.*}")"
   out="$OUT/${base}.mp4"
   echo "   $f → $out"
   ffmpeg -nostdin -y -i "$f" \
-    -vf "$GRADE" \
+    -t 10 -vf "$GRADE" \
     -an -c:v libx264 -profile:v high -pix_fmt yuv420p \
     -crf 30 -preset slow -movflags +faststart \
     -hide_banner -loglevel error "$out"

@@ -8,7 +8,7 @@ let currentView = 'home';
 let pantryData = null;
 let pantryView = 'grid';
 
-const VIEWS = ['home', 'recipes', 'reminisce', 'pantry'];
+const VIEWS = ['home', 'recipes', 'pantry'];
 const FILTER_IDS = ['search', 'cuisine', 'time', 'category'];
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const noHover = window.matchMedia('(hover: none)');
@@ -42,7 +42,13 @@ const Pantry = (() => {
   async function connectCloud(cfg) {
     const a = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js');
     const d = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js');
-    const database = d.getDatabase(a.initializeApp(cfg));
+    const au = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');
+    const app = a.initializeApp(cfg);
+    // Rules require a signed-in user. Anonymous auth issues a silent token on
+    // first load — no login screen, invisible to the family. We must await it
+    // before any read/write, or the rules will reject us.
+    await au.signInAnonymously(au.getAuth(app));
+    const database = d.getDatabase(app);
     d.onValue(d.ref(database, 'pantryOut'), snap => { out = snap.val() || {}; saveLocal(); emit(); });
     pushCloud = (slug, inStock) => d.set(d.ref(database, 'pantryOut/' + slug), inStock ? null : true);
     emit();
@@ -112,13 +118,9 @@ function preloadPhotos() {
   allRecipes.forEach(r => { if (r.photo) { const im = new Image(); im.src = r.photo; imgCache[r.id] = im; } });
 }
 
-// HOME = two layers over a full-bleed plum hero:
-//  • faint slideshow — photos cycling right-to-left at ~20% opacity, always
-//    (this is the idle state).
-//  • bright trail — big rounded photo tiles spawned along the cursor's path
-//    (Square-style), full opacity, fading oldest-first — only while moving.
-// The floating video card crossfades through candid family-cooking clips,
-// curated for people + food + cooking action, Super-8 graded (see process_media.sh).
+// HOME hero: a headline beside a single floating, borderless video card that
+// crossfades through candid family-cooking clips — curated for people + food +
+// cooking action, clean/ungraded footage (see process_media.sh).
 const HERO_CLIPS = [
   'IMG_0789',  // najeer smiling at the counter
   'IMG_0381',  // breading katsu
@@ -197,7 +199,6 @@ function initRoute() {
     navigateToRecipe(idBySlug[rec[1]], null);
   } else if (h === '#/recipes') { history.replaceState({ view: 'recipes' }, '', h); showView('recipes'); }
   else if (h === '#/pantry') { history.replaceState({ view: 'pantry' }, '', h); showView('pantry'); }
-  else if (h === '#/reminisce') { history.replaceState({ view: 'reminisce' }, '', h); showView('reminisce'); }
   else { history.replaceState({ view: 'home' }, '', '#/'); showView('home'); }
 }
 document.querySelectorAll('[data-view]').forEach(b =>
